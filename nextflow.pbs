@@ -1,0 +1,10 @@
+#!/bin/bash
+#PBS -l walltime=50:00:00
+#PBS -P RDS-FVS-KoalaGen-RW 
+#PBS -q defaultQ 
+#PBS -l nodes=1:ppn=1
+#PBS -l mem=20GB
+module load java
+cd /home/dome5715/work/nextflow/NGI-RNAseq
+nextflow rna-bp.nf --genome 'phaCin3' --reads '/home/dome5715/work/RNAseq/conjunctiva/*_R{1,2}.fastq.gz' -resume >phaCin3.log 2>&1
+
