@@ -1,7 +1,7 @@
-# RNA-BP
-Pipeline for RNA sequencing best practice analysis at the NGI at Scilifelab Stockholm, Sweden
+# RNAseq Ref
+Pipeline for RNA sequencing analysis using a reference genome at The University of Sydney, based on the NGI best practice pipleine at Scilifelab Stockholm, Sweden 
 
-Written by Phil Ewels (@ewels) and Rickard Hammarén (@Hammarn)
+Original pipleine by Phil Ewels (@ewels) and Rickard Hammarén (@Hammarn). Updated to run on USyd HPC Artemis by Denis O'Meally (@drejom)
 
 ## Installation
 ### NextFlow installation
@@ -13,43 +13,34 @@ of NextFlow looks like this:
 curl -fsSL get.nextflow.io | bash
 mv ./nextflow ~/bin
 ```
-Note that if you're running on the Swedish UPPMAX cluster (Milou) you can load NextFlow as an
-environment module:
-```
-module load nextflow
-```
 
 ### NextFlow configuration
 Next, you need to set up a config file so that NextFlow knows how to run and where to find reference
 indexes. You can find an example configuration file for UPPMAX (milou) with this repository:
-[`example_uppmax_config`](https://github.com/SciLifeLab/NGI-RNAseq/blob/master/example_uppmax_config).
+[`example_uppmax_config`](https://github.com/drejom/rnaseq-ref/blob/master/nextflow.config).
 
-Copy this file to `~/.nextflow/config` and edit the line `'-A b2013064'` to contain your own UPPMAX project
+Copy this file to `~/.nextflow/config` and edit the line `'-P RDS-FVS-KoalaGen-RW'` to contain your own Artemis project
 identifier instead.
-
-It is entirely possible to run this pipeline on other clusters - just note that you may need to customise
-the `process` environment (eg. if you're using a cluster system other than SLURM) and the paths to reference
-files.
 
 ### Pipeline installation
 This pipeline itself needs no installation - NextFlow will automatically fetch it from GitHub when run if
-`SciLifeLab/NGI-RNAseq` is specified as the pipeline name.
+`drejom/rnaseq-ref` is specified as the pipeline name.
 
 If you prefer, you can download the files yourself from GitHub and run them directly:
 ```
-git clone https://github.com/SciLifeLab/NGI-RNAseq.git
-nextflow run NGI-RNAseq/main.nf
+git clone https://github.com/drejom/rnaseq-ref.git
+nextflow run rnaseq-ref/rna-bp.nf
 ```
 
 ## Running the pipeline
 The typical command for running the pipeline is as follows:
 ```
-nextflow run SciLifeLab/NGI-RNAseq --reads '*_R{1,2}.fastq.gz' --genome 'GRCm38'
+nextflow run drejom/rnaseq-ref --reads '*_R{1,2}.fastq.gz' --genome 'phaCin4'
 ```
 or using a more manual approach ( require you to clone the git repository)
 
 ```
-nextflow path_to_NGI-RNAseq/main.nf -c path_to_your_nextflow_config --reads '*_R{1,2}.fastq.gz' --genome 'GRCm38'
+nextflow rnaseq-ref/rna-bp.nf -c path_to_your_nextflow_config --reads '*_R{1,2}.fastq.gz' --genome 'phaCin4'
 ```
 
 Note that the pipeline will create files in your working directory:
@@ -75,12 +66,12 @@ If left unspecified, the pipeline will assume that the data is in a directory ca
 
 ### `--genome`
 The reference genome to use of the analysis, needs to be one of the genome specified in the config file.
-The human `GRCh37` genome is set as default.
+The koala `phaCin4` genome is set as default.
 ```
---genome 'GRCm38'
+--genome 'phaCin3'
 ```
-The `example_uppmax_config` file currently has the location of references for `GRCh37` (Human), `GRCm38` (Mouse)
-and `sacCer2` (Yeast).
+The `nextflow.config` file currently has the location of references for `phaCin4` (koala PacBio - falcon), `phaCin3` (koala hybrid PacBio)
+and `phaCin1` (koala illumina - abyss).
 
 ### `--sampleLevel`
 Used to turn of the edgeR MDS and heatmap, which require at least three samples to work. I.e use this when
@@ -99,7 +90,7 @@ strand specific libraries (antisense). `1+-,1-+,2++,2--` decodes as:
 Use this parameter to override these defaults. For example, if your data is paired end and strand specific,
 but same-sense to the reference, you could run:
 ```
-nextflow run NGI-RNAseq/main.nf --strandRule '1++,1--,2+-,2-+'
+nextflow run rnaseq-ref/rna-bp.nf --strandRule '1++,1--,2+-,2-+'
 ```
 Use `--strandRule 'none'` if your data is not strand specific.
 
