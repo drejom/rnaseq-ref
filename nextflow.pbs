@@ -5,7 +5,7 @@
 #PBS -l nodes=1:ppn=1
 #PBS -l mem=20GB
 module load java
-cd /home/dome5715/work/nextflow/NGI-RNAseq
+cd `pwd`
 #nextflow rna-bp.nf --genome 'phaCin4' --reads '/home/dome5715/work/RNAseq/conjunctiva/*_R{1,2}.fastq.gz' -with-trace -with-timeline phaCin4.html -resume >phaCin4.log 2>&1
 nextflow rna-bp.nf --genome 'phaCin3' --reads '/home/dome5715/work/RNAseq/conjunctiva/*_R{1,2}.fastq.gz' -with-trace -with-timeline phaCin3.html -resume >phaCin3.log 2>&1
 #nextflow rna-bp.nf --genome 'phaCin1' --reads '/home/dome5715/work/RNAseq/conjunctiva/*_R{1,2}.fastq.gz' -with-trace -with-timeline phaCin1.html -resume >phaCin1.log 2>&1
