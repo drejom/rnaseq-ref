@@ -464,7 +464,7 @@ process dupRad {
     cat(
       paste("- dupRadar Int (duprate at low read counts):", fit\$intercept),
       paste("- dupRadar Sl (progression of the duplication rate):", fit\$slope),
-      fill=TRUE, labels="bam_md",
+      fill=TRUE, labels="$bam_md",
       file=paste0("$bam_md", "_intercept_slope.txt"), append=FALSE
     )
     
